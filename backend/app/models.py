@@ -15,7 +15,6 @@ class User(AbstractUser):
     name = models.CharField('name', max_length=40, unique=True)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField('password', max_length=255)
-    confirmed = models.BooleanField(default=False, verbose_name="confirmed")
 
 
 class Category(models.Model):
@@ -38,3 +37,5 @@ class Order(models.Model):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=100)
+
+
