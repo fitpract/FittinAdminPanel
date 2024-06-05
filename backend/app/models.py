@@ -24,7 +24,7 @@ class Category(models.Model):
     child = models.CharField('child', max_length=255)
 
 
-class Products(models.Model):
+class Product(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField('name', max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -39,3 +39,8 @@ class Order(models.Model):
     status = models.CharField(max_length=100)
 
 
+class OrderedProduct(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    amount = models.IntegerField('amount', default=1)
