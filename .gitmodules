@@ -1,3 +1,6 @@
 [submodule "front"]
 	path = front
 	url = https://github.com/fitpract/fittin-admin-panel-front.git
+[submodule "fittin-admin-panel-back"]
+	path = fittin-admin-panel-back
+	url = https://github.com/fitpract/fittin-admin-panel-back.git
