@@ -9,7 +9,7 @@ class User(AbstractUser):
     name = models.CharField('name', max_length=40, unique=True)
     surname = models.CharField('name', max_length=120)
     password = models.CharField('password', max_length=255)
-    is_stuff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
     username = None
 
@@ -22,9 +22,9 @@ class User(AbstractUser):
 
 class Category(models.Model):
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField('name', max_length=255)
-    parent = models.CharField('parent', max_length=255)
-    child = models.CharField('child', max_length=255)
+    name = models.CharField('name', max_length=255, unique=True)
+    parent = models.CharField('parent', max_length=255, default='')
+    child = models.CharField('child', max_length=255, default='')
 
     class Meta:
         db_table = 'category'

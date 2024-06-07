@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from models import UserAdmin, Category, Product, Order, OrderedProduct, User
+from app.models import Category, Product, Order, OrderedProduct, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,8 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-
-        fields = ['id', 'name', 'parent', 'child']
+        fields = '__all__'
 
 
 class ProductSerializer(serializers.ModelSerializer):
