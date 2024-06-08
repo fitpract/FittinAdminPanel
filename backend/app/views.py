@@ -1,15 +1,13 @@
 import datetime
 
 import jwt
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from app.models import User, Product, Order, OrderedProduct, Category
-
-from app.serializers import UserSerializer, ProductSerializer, CategorySerializer, OrderSerializer, \
+from .models import User, Product, Category, Order, OrderedProduct
+from .serializers import UserSerializer, ProductSerializer, CategorySerializer, OrderSerializer, \
     OrderedProductSerializer
 
 
@@ -156,3 +154,37 @@ class CategoryDetailAPIView(APIView):
         category.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    @action(detail=False, methods=['get'])
+    def order_by_user(self, request):
+        # Получаем идентификатор пользователя из запроса
+        user_id = request.query_params.get('user_id')
+        if not user_id:
+            return Response(data={'error': 'User ID обязателен в параметрах запроса'}, status=status.HTTP_400_BAD_REQUEST)
+
+        orders = Order.object.filter(user_id=user_id)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def product_in_order(self, request):
+        order_id = request.query_params.get('order_id')
+        product_id = request.query_params.get('product_id')
+        if not order_id or not product_id:
+            return Response(data={'error': 'Order ID и Product ID обязательны в параметрах запроса'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        product_in_order = OrderedProduct.objects.filter(order_id=order_id, product_id=product_id).first()
+        if not product_in_order:
+            return Response(data={'error': 'Продукт не найден в указанном заказе'},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        serializer = OrderedProductSerializer(product_in_order)
+        return Response(serializer.data)
+
+
+

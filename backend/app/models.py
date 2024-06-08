@@ -59,3 +59,5 @@ class OrderedProduct(models.Model):
 
     class Meta:
         db_table = 'orderedProduct'
+
+
